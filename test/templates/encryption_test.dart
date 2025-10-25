@@ -6,7 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:pointycastle/key_generators/rsa_key_generator.dart';
 import 'package:pointycastle/pointycastle.dart' as pc;
 import 'package:pointycastle/random/fortuna_random.dart';
-import 'package:template_expressions/template_expressions.dart';
+import 'package:template_expressions_4/template_expressions.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -28,16 +28,11 @@ void main() {
     test('encrypt / decrypt', () {
       final key = SecureRandom(256 ~/ 8);
 
-      final context = {
-        'data': 'Hello World!',
-        'key': key,
-      };
+      final context = {'data': 'Hello World!', 'key': key};
 
       final encrypted = Template(
         value: r'${AES().key(key).encrypt(data)}',
-      ).process(
-        context: context,
-      );
+      ).process(context: context);
 
       expect(encrypted != context['data'], true);
 
@@ -49,17 +44,11 @@ void main() {
     });
 
     test('encrypt / decrypt: string key', () {
-      final context = {
-        'data': 'Hello World!',
-        'iv': _kIV,
-        'key': _kAesKey,
-      };
+      final context = {'data': 'Hello World!', 'iv': _kIV, 'key': _kAesKey};
 
       final encrypted = Template(
         value: r'${AES().key(key).iv(iv).encrypt(data)}',
-      ).process(
-        context: context,
-      );
+      ).process(context: context);
 
       final parts = encrypted.split(':');
 
@@ -68,10 +57,7 @@ void main() {
 
       final decrypted = Template(
         value: r'${AES().key(key).iv(iv).decrypt(encrypted).toString()}',
-      ).process(context: {
-        ...context,
-        'encrypted': encrypted,
-      });
+      ).process(context: {...context, 'encrypted': encrypted});
 
       expect(decrypted, context['data']);
     });
@@ -93,18 +79,13 @@ void main() {
 
       final encrypted = Template(
         value: r'${RSA().publicKey(publicKey).encrypt(data)}',
-      ).process(
-        context: context,
-      );
+      ).process(context: context);
 
       expect(encrypted != context['data'], true);
 
       final decrypted = Template(
         value: r'${RSA().privateKey(privateKey).decrypt(encrypted).toString()}',
-      ).process(context: {
-        ...context,
-        'encrypted': encrypted,
-      });
+      ).process(context: {...context, 'encrypted': encrypted});
 
       expect(decrypted, context['data']);
     });
@@ -121,17 +102,12 @@ void main() {
       final encrypted = Template(
         value:
             r'${RSA().aes(AES().key(key).iv(iv)).publicKey(publicKey).encrypt(data)}',
-      ).process(
-        context: context,
-      );
+      ).process(context: context);
 
       final parts = encrypted.split(':');
 
       final aesEncrypted = '${parts[1]}:${parts[2]}';
-      expect(
-        parts[1],
-        _kIV,
-      );
+      expect(parts[1], _kIV);
       expect(
         aesEncrypted,
         'UPiAY93c6VgQyiTc8mXzzg==:TRSTeVKIA0WWMFHVHmbDQoR9dDt7jyF4SauqcMK8e6c=',
@@ -140,10 +116,7 @@ void main() {
       final decrypted = Template(
         value:
             r'${RSA().aes(AES().key(key).iv(iv)).privateKey(privateKey).decrypt(encrypted).toString()}',
-      ).process(context: {
-        ...context,
-        'encrypted': encrypted,
-      });
+      ).process(context: {...context, 'encrypted': encrypted});
 
       expect(decrypted, context['data']);
     });
@@ -157,9 +130,7 @@ void main() {
 
       final signature = Template(
         value: r'${RSA().privateKey(privateKey).sign(data).toBase64()}',
-      ).process(
-        context: context,
-      );
+      ).process(context: context);
 
       expect(
         signature,
@@ -168,20 +139,14 @@ void main() {
 
       var verified = Template(
         value: r'${RSA().publicKey(publicKey).verify(data, signature)}',
-      ).process(context: {
-        ...context,
-        'signature': signature,
-      });
+      ).process(context: {...context, 'signature': signature});
 
       expect(verified, 'true');
 
       verified = Template(
         value:
             r'${RSA().publicKey(publicKey).verify("Hellow World!", signature)}',
-      ).process(context: {
-        ...context,
-        'signature': signature,
-      });
+      ).process(context: {...context, 'signature': signature});
 
       expect(verified, 'false');
     });

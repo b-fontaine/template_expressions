@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 import 'package:logging/logging.dart';
-import 'package:template_expressions/template_expressions.dart';
+import 'package:template_expressions_4/template_expressions.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -22,50 +22,47 @@ void main() {
   });
 
   group('Crypto', () {
-    test(
-      'hmac',
-      () {
-        const key =
-            'YWFCa3hKezJNRlQrK0EhPkBrJj5oem42OlUpWCElJVlaMmM+K3RhamA7Zjk3Z1ArRkQ7K1J6bl46diRVSz03UDJwTlczeydnNWc/MmtzdlNmY3I1fUszcShnI31jITg+XlRXcXd4V0VbRntHSEFBS2grUUZUKFR6MmFaPVQqJ04=';
-        final context = {'key': key};
+    test('hmac', () {
+      const key =
+          'YWFCa3hKezJNRlQrK0EhPkBrJj5oem42OlUpWCElJVlaMmM+K3RhamA7Zjk3Z1ArRkQ7K1J6bl46diRVSz03UDJwTlczeydnNWc/MmtzdlNmY3I1fUszcShnI31jITg+XlRXcXd4V0VbRntHSEFBS2grUUZUKFR6MmFaPVQqJ04=';
+      final context = {'key': key};
 
-        final template = Template(value: r'${hmac(key, "foobar")}');
-        final actual = template.process(context: context);
+      final template = Template(value: r'${hmac(key, "foobar")}');
+      final actual = template.process(context: context);
 
-        expect(actual,
-            'e52f174665d7ad3791c2cf8d1f7ab93f654189926975c02defbe3439cdb48716');
-      },
-    );
+      expect(
+        actual,
+        'e52f174665d7ad3791c2cf8d1f7ab93f654189926975c02defbe3439cdb48716',
+      );
+    });
 
-    test(
-      'hmac256',
-      () {
-        const key =
-            'YWFCa3hKezJNRlQrK0EhPkBrJj5oem42OlUpWCElJVlaMmM+K3RhamA7Zjk3Z1ArRkQ7K1J6bl46diRVSz03UDJwTlczeydnNWc/MmtzdlNmY3I1fUszcShnI31jITg+XlRXcXd4V0VbRntHSEFBS2grUUZUKFR6MmFaPVQqJ04=';
-        final context = {'key': key};
+    test('hmac256', () {
+      const key =
+          'YWFCa3hKezJNRlQrK0EhPkBrJj5oem42OlUpWCElJVlaMmM+K3RhamA7Zjk3Z1ArRkQ7K1J6bl46diRVSz03UDJwTlczeydnNWc/MmtzdlNmY3I1fUszcShnI31jITg+XlRXcXd4V0VbRntHSEFBS2grUUZUKFR6MmFaPVQqJ04=';
+      final context = {'key': key};
 
-        final template = Template(value: r'${hmac256(key, "foobar")}');
-        final actual = template.process(context: context);
+      final template = Template(value: r'${hmac256(key, "foobar")}');
+      final actual = template.process(context: context);
 
-        expect(actual,
-            'e52f174665d7ad3791c2cf8d1f7ab93f654189926975c02defbe3439cdb48716');
-      },
-    );
+      expect(
+        actual,
+        'e52f174665d7ad3791c2cf8d1f7ab93f654189926975c02defbe3439cdb48716',
+      );
+    });
 
-    test(
-      'hmac512',
-      () {
-        const key =
-            'YWFCa3hKezJNRlQrK0EhPkBrJj5oem42OlUpWCElJVlaMmM+K3RhamA7Zjk3Z1ArRkQ7K1J6bl46diRVSz03UDJwTlczeydnNWc/MmtzdlNmY3I1fUszcShnI31jITg+XlRXcXd4V0VbRntHSEFBS2grUUZUKFR6MmFaPVQqJ04=';
-        final context = {'key': key};
+    test('hmac512', () {
+      const key =
+          'YWFCa3hKezJNRlQrK0EhPkBrJj5oem42OlUpWCElJVlaMmM+K3RhamA7Zjk3Z1ArRkQ7K1J6bl46diRVSz03UDJwTlczeydnNWc/MmtzdlNmY3I1fUszcShnI31jITg+XlRXcXd4V0VbRntHSEFBS2grUUZUKFR6MmFaPVQqJ04=';
+      final context = {'key': key};
 
-        final template = Template(value: r'${hmac512(key, "foobar")}');
-        final actual = template.process(context: context);
+      final template = Template(value: r'${hmac512(key, "foobar")}');
+      final actual = template.process(context: context);
 
-        expect(actual,
-            '1a3a8dc298ecc8c97855e29454145a2deb39a86bb56f49c2bb951c9cbd07f22abf28d868230834973fb4f87cb6121f6cbb2d4ce29f378305a5b3cd7dc8d09aad');
-      },
-    );
+      expect(
+        actual,
+        '1a3a8dc298ecc8c97855e29454145a2deb39a86bb56f49c2bb951c9cbd07f22abf28d868230834973fb4f87cb6121f6cbb2d4ce29f378305a5b3cd7dc8d09aad',
+      );
+    });
 
     test('md5', () {
       final template = Template(value: r'${md5("foobar")}');
@@ -136,10 +133,7 @@ void main() {
         syntax: [const MustacheExpressionSyntax()],
         value: '{{DateTime(year, 02)}}',
       );
-      expect(
-        template.process(context: context),
-        DateTime(2022, 02).toString(),
-      );
+      expect(template.process(context: context), DateTime(2022, 02).toString());
 
       template = Template(
         syntax: [const MustacheExpressionSyntax()],
@@ -152,9 +146,7 @@ void main() {
     });
 
     test('epoch millis', () {
-      final template = Template(
-        value: r'${DateTime(1645412678503)}',
-      );
+      final template = Template(value: r'${DateTime(1645412678503)}');
       expect(
         template.process(context: context),
         DateTime.fromMillisecondsSinceEpoch(1645412678503).toString(),
@@ -174,18 +166,12 @@ void main() {
         value:
             r'${DateFormat("yyyy-MM-dd").format(DateTime([2022, 02, 07]).toLocal())}',
       );
-      expect(
-        template.process(context: context),
-        '2022-02-07',
-      );
+      expect(template.process(context: context), '2022-02-07');
 
       template = Template(
         value: r'${DateTime([2022, 02, 07]).format("yyyy-MM-dd")}',
       );
-      expect(
-        template.process(context: context),
-        '2022-02-07',
-      );
+      expect(template.process(context: context), '2022-02-07');
     });
 
     test('now', () {
@@ -200,9 +186,7 @@ void main() {
         now.subtract(const Duration(days: 1)).toUtc().toString(),
       );
 
-      template = Template(
-        value: r'${now().subtract(days(1)).toUtc()}',
-      );
+      template = Template(value: r'${now().subtract(days(1)).toUtc()}');
       expect(
         template.process(context: customContext),
         now.subtract(const Duration(days: 1)).toUtc().toString(),
@@ -233,9 +217,7 @@ void main() {
     test('List', () {
       final context = <String, dynamic>{};
 
-      final template = Template(
-        value: r'${Duration([1, 2, 3, 4, 5])}',
-      );
+      final template = Template(value: r'${Duration([1, 2, 3, 4, 5])}');
       expect(
         template.process(context: context),
         const Duration(
@@ -251,9 +233,7 @@ void main() {
     test('Params', () {
       final context = <String, dynamic>{};
 
-      final template = Template(
-        value: r'${Duration(1, 2, 3, 4, 5)}',
-      );
+      final template = Template(value: r'${Duration(1, 2, 3, 4, 5)}');
       expect(
         template.process(context: context),
         const Duration(
@@ -269,15 +249,10 @@ void main() {
     test('millis', () {
       final context = <String, dynamic>{};
 
-      final template = Template(
-        value: r'${Duration(1001)}',
-      );
+      final template = Template(value: r'${Duration(1001)}');
       expect(
         template.process(context: context),
-        const Duration(
-          seconds: 1,
-          milliseconds: 1,
-        ).toString(),
+        const Duration(seconds: 1, milliseconds: 1).toString(),
       );
     });
   });
@@ -291,21 +266,14 @@ void main() {
       'b': () async {
         await Future.delayed(const Duration(seconds: 1));
         return 2;
-      }
+      },
     };
 
     test('async', () async {
       final startTime = DateTime.now().millisecondsSinceEpoch;
-      final template = Template(
-        value: r'${a() + b()}',
-      );
+      final template = Template(value: r'${a() + b()}');
 
-      expect(
-        await template.processAsync(
-          context: context,
-        ),
-        '3',
-      );
+      expect(await template.processAsync(context: context), '3');
 
       expect(
         DateTime.now().millisecondsSinceEpoch - startTime,
@@ -317,10 +285,7 @@ void main() {
   group('JsonPath', () {
     final context = {
       'person': {
-        'name': {
-          'first': 'John',
-          'last': 'Doe',
-        },
+        'name': {'first': 'John', 'last': 'Doe'},
       },
     };
     test('JsonPath', () {
@@ -329,10 +294,7 @@ void main() {
             r'${JsonPath("$.name.first").read(person).first.value + " " + JsonPath("$.name.last").read(person).first.value}',
       );
 
-      expect(
-        template.process(context: context),
-        'John Doe',
-      );
+      expect(template.process(context: context), 'John Doe');
     });
 
     test('json_path', () {
@@ -341,31 +303,20 @@ void main() {
             r'${json_path(person, "$.name.first").toUpperCase() + " " + json_path(person, "$.name.last").toUpperCase()}',
       );
 
-      expect(
-        template.process(context: context),
-        'JOHN DOE',
-      );
+      expect(template.process(context: context), 'JOHN DOE');
     });
 
     test('json_path simple', () {
-      final template = Template(
-        value: r"${json_path(person, '$.name.first')}",
-      );
+      final template = Template(value: r"${json_path(person, '$.name.first')}");
 
-      expect(
-        template.process(context: context),
-        'John',
-      );
+      expect(template.process(context: context), 'John');
     });
 
     test('list', () {
       expect(
         Template(value: r'${x.path("$[1]")}').process(
           context: {
-            'x': [
-              'foo',
-              'bar',
-            ],
+            'x': ['foo', 'bar'],
           },
         ),
         'bar',
@@ -373,12 +324,11 @@ void main() {
     });
     test('map', () {
       expect(
-        Template(value: r'${x.path("$.bar")}').process(context: {
-          'x': {
-            'foo': 'foo',
-            'bar': 'bar',
+        Template(value: r'${x.path("$.bar")}').process(
+          context: {
+            'x': {'foo': 'foo', 'bar': 'bar'},
           },
-        }),
+        ),
         'bar',
       );
     });
@@ -391,7 +341,7 @@ void main() {
               'foo': 'foo',
               'bar': 'bar',
             }
-          '''
+          ''',
           },
         ),
         'bar',
@@ -405,7 +355,7 @@ void main() {
             'x': '''
 foo: foo
 bar: bar
-'''
+''',
           },
         ),
         'bar',
@@ -418,27 +368,27 @@ bar: bar
 
     test('toBase64', () {
       expect(
-        Template(value: r'${input.toBase64()}').process(
-          context: {'input': utf8.encode(input)},
-        ),
+        Template(
+          value: r'${input.toBase64()}',
+        ).process(context: {'input': utf8.encode(input)}),
         base64.encode(utf8.encode(input)),
       );
     });
 
     test('toHex', () {
       expect(
-        Template(value: r'${input.toHex()}').process(
-          context: {'input': utf8.encode(input)},
-        ),
+        Template(
+          value: r'${input.toHex()}',
+        ).process(context: {'input': utf8.encode(input)}),
         hex.encode(utf8.encode(input)),
       );
     });
 
     test('toString', () {
       expect(
-        Template(value: r'${input.toString()}').process(
-          context: {'input': utf8.encode(input)},
-        ),
+        Template(
+          value: r'${input.toString()}',
+        ).process(context: {'input': utf8.encode(input)}),
         input,
       );
     });
@@ -447,29 +397,27 @@ bar: bar
   group('NumberFormat', () {
     test('format', () {
       expect(
-        Template(value: r'${NumberFormat("#,###.00").format(x)}')
-            .process(context: {
-          'x': 1234,
-        }),
+        Template(
+          value: r'${NumberFormat("#,###.00").format(x)}',
+        ).process(context: {'x': 1234}),
         '1,234.00',
       );
       expect(
-        Template(value: r'${NumberFormat("#,###.00").format(x)}')
-            .process(context: {
-          'x': 1234.0,
-        }),
+        Template(
+          value: r'${NumberFormat("#,###.00").format(x)}',
+        ).process(context: {'x': 1234.0}),
         '1,234.00',
       );
       expect(
-        Template(value: r'${x.format("#,###.00")}').process(context: {
-          'x': 1234.0,
-        }),
+        Template(
+          value: r'${x.format("#,###.00")}',
+        ).process(context: {'x': 1234.0}),
         '1,234.00',
       );
       expect(
-        Template(value: r'${x.format("#,###.00")}').process(context: {
-          'x': 1234,
-        }),
+        Template(
+          value: r'${x.format("#,###.00")}',
+        ).process(context: {'x': 1234}),
         '1,234.00',
       );
     });
@@ -496,9 +444,7 @@ bar: bar
 
   group('random', () {
     test('int', () {
-      final template = Template(
-        value: r'${random(100)}',
-      );
+      final template = Template(value: r'${random(100)}');
 
       final processed = int.parse(template.process());
 
@@ -506,9 +452,7 @@ bar: bar
     });
 
     test('double', () {
-      final template = Template(
-        value: r'${random()}',
-      );
+      final template = Template(value: r'${random()}');
 
       final processed = double.parse(template.process());
 

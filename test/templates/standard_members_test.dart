@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:logging/logging.dart';
-import 'package:template_expressions/template_expressions.dart';
+import 'package:template_expressions_4/template_expressions.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -23,21 +23,19 @@ void main() {
     test('base64', () {
       const input =
           r'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=`~!@#$%^&*()_+[]{},./<>?;:"\|';
-      var template = Template(
-        value: r'${utf8.decode(base64.decode(input))}',
-      );
+      var template = Template(value: r'${utf8.decode(base64.decode(input))}');
 
       expect(
-        template.process(context: {
-          'input':
-              'YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXpBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWjEyMzQ1Njc4OTAtPWB+IUAjJCVeJiooKV8rW117fSwuLzw+Pzs6Ilx8'
-        }),
+        template.process(
+          context: {
+            'input':
+                'YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXpBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWjEyMzQ1Njc4OTAtPWB+IUAjJCVeJiooKV8rW117fSwuLzw+Pzs6Ilx8',
+          },
+        ),
         input,
       );
 
-      template = Template(
-        value: r'${base64.encode(input)}',
-      );
+      template = Template(value: r'${base64.encode(input)}');
       expect(
         template.process(context: {'input': utf8.encode(input)}),
         'YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXpBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWjEyMzQ1Njc4OTAtPWB+IUAjJCVeJiooKV8rW117fSwuLzw+Pzs6Ilx8',
@@ -55,15 +53,13 @@ void main() {
         template.process(
           context: {
             'input':
-                'YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXpBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWjEyMzQ1Njc4OTAtPWB-IUAjJCVeJiooKV8rW117fSwuLzw-Pzs6Ilx8'
+                'YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXpBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWjEyMzQ1Njc4OTAtPWB-IUAjJCVeJiooKV8rW117fSwuLzw-Pzs6Ilx8',
           },
         ),
         input,
       );
 
-      template = Template(
-        value: r'${base64url.encode(input)}',
-      );
+      template = Template(value: r'${base64url.encode(input)}');
       expect(
         template.process(context: {'input': utf8.encode(input)}),
         'YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXpBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWjEyMzQ1Njc4OTAtPWB-IUAjJCVeJiooKV8rW117fSwuLzw-Pzs6Ilx8',
@@ -84,22 +80,16 @@ void main() {
     test('json', () {
       const input = '{"foo":"bar"}';
 
-      final template = Template(
-        value: r'${json.encode(json.decode(input))}',
-      );
+      final template = Template(value: r'${json.encode(json.decode(input))}');
 
       expect(template.process(context: {'input': input}), input);
     });
 
     test('utf8', () {
-      final template = Template(
-        value: r'${utf8.decode(utf8.encode(input))}',
-      );
+      final template = Template(value: r'${utf8.decode(utf8.encode(input))}');
 
       expect(
-        template.process(context: {
-          'input': 'Hello World!',
-        }),
+        template.process(context: {'input': 'Hello World!'}),
         'Hello World!',
       );
     });
@@ -108,9 +98,7 @@ void main() {
   group('DateTime', () {
     final start = DateTime(2022, 2, 7);
     test('add', () {
-      final context = {
-        'start': start,
-      };
+      final context = {'start': start};
       final template = Template(
         syntax: [const MustacheExpressionSyntax()],
         value: '{{start.add(minutes(5).add(seconds(30)))}}',
@@ -120,18 +108,13 @@ void main() {
         template.process(context: context),
         DateTime.fromMillisecondsSinceEpoch(
           start.millisecondsSinceEpoch +
-              const Duration(
-                minutes: 5,
-                seconds: 30,
-              ).inMilliseconds,
+              const Duration(minutes: 5, seconds: 30).inMilliseconds,
         ).toString(),
       );
     });
 
     test('subtract', () {
-      final context = {
-        'start': start,
-      };
+      final context = {'start': start};
       final template = Template(
         syntax: [const MustacheExpressionSyntax()],
         value: '{{start.subtract(minutes(5).subtract(seconds(30)))}}',
@@ -141,10 +124,7 @@ void main() {
         template.process(context: context),
         DateTime.fromMillisecondsSinceEpoch(
           start.millisecondsSinceEpoch -
-              const Duration(
-                minutes: 4,
-                seconds: 30,
-              ).inMilliseconds,
+              const Duration(minutes: 4, seconds: 30).inMilliseconds,
         ).toString(),
       );
     });
@@ -153,10 +133,7 @@ void main() {
   group('List', () {
     test('toJson', () {
       final context = {
-        'input': [
-          'John',
-          'Smith',
-        ]
+        'input': ['John', 'Smith'],
       };
 
       expect(
@@ -177,10 +154,7 @@ void main() {
     test('entries', () {
       final context = {
         'input': {
-          'name': {
-            'first': 'John',
-            'last': 'Smith',
-          },
+          'name': {'first': 'John', 'last': 'Smith'},
         },
       };
       expect(
@@ -193,10 +167,7 @@ void main() {
     test('toJson', () {
       final context = {
         'input': {
-          'name': {
-            'first': 'John',
-            'last': 'Smith',
-          },
+          'name': {'first': 'John', 'last': 'Smith'},
         },
       };
 
@@ -214,14 +185,9 @@ void main() {
 
   group('MapEntry', () {
     test('key / value', () {
-      final context = {
-        'input': const MapEntry('KEY', 'VALUE'),
-      };
+      final context = {'input': const MapEntry('KEY', 'VALUE')};
 
-      expect(
-        Template(value: r'${input.key}').process(context: context),
-        'KEY',
-      );
+      expect(Template(value: r'${input.key}').process(context: context), 'KEY');
 
       expect(
         Template(value: r'${input.value}').process(context: context),
@@ -237,9 +203,9 @@ void main() {
       );
 
       expect(
-        template.process(context: {
-          'input': '{"first": "John", "last": "Smith"}',
-        }),
+        template.process(
+          context: {'input': '{"first": "John", "last": "Smith"}'},
+        ),
         'Smith, John',
       );
     });
@@ -247,51 +213,32 @@ void main() {
     test('replaceAll', () {
       final template = Template(value: r'${input.replaceAll("\n", "\\n")}');
 
-      expect(
-        template.process(
-          context: {
-            'input': 'a\nb\nc\n',
-          },
-        ),
-        'a\\nb\\nc\\n',
-      );
+      expect(template.process(context: {'input': 'a\nb\nc\n'}), 'a\\nb\\nc\\n');
     });
 
     test('toLowerCase', () {
-      final template = Template(
-        value: r'${input.toLowerCase()}',
-      );
+      final template = Template(value: r'${input.toLowerCase()}');
 
       expect(
-        template.process(context: {
-          'input': 'Hello World!',
-        }),
+        template.process(context: {'input': 'Hello World!'}),
         'hello world!',
       );
     });
 
     test('toUpperCase', () {
-      final template = Template(
-        value: r'${input.toUpperCase()}',
-      );
+      final template = Template(value: r'${input.toUpperCase()}');
 
       expect(
-        template.process(context: {
-          'input': 'Hello World!',
-        }),
+        template.process(context: {'input': 'Hello World!'}),
         'HELLO WORLD!',
       );
     });
 
     test('trim', () {
-      final template = Template(
-        value: r'${input.trim()}',
-      );
+      final template = Template(value: r'${input.trim()}');
 
       expect(
-        template.process(context: {
-          'input': '  Hello World!  ',
-        }),
+        template.process(context: {'input': '  Hello World!  '}),
         'Hello World!',
       );
     });

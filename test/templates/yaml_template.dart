@@ -1,12 +1,9 @@
-import 'package:template_expressions/template_expressions.dart';
+import 'package:template_expressions_4/template_expressions.dart';
 import 'package:test/test.dart';
 
 void main() {
   final context = {
-    'person': {
-      'firstName': 'John',
-      'lastName': 'Smith',
-    },
+    'person': {'firstName': 'John', 'lastName': 'Smith'},
   };
 
   test('yaml template', () {

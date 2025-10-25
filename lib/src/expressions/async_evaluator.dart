@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
-import 'package:template_expressions/expressions.dart';
+import 'package:template_expressions_4/expressions.dart';
 
 Stream _asStream(v) => v is Stream
     ? v
     : v is Future
-        ? Stream.fromFuture(v)
-        : Stream.value(v);
+    ? Stream.fromFuture(v)
+    : Stream.value(v);
 Literal _asLiteral(v) {
   if (v is Map) {
     return Literal(v.map((k, v) => MapEntry(_asLiteral(k), _asLiteral(v))));
@@ -29,11 +29,9 @@ class AsyncExpressionEvaluator extends ExpressionEvaluator {
     Map<String, dynamic> context, {
     void Function(String name, dynamic value)? onValueAssigned,
   }) {
-    return _asStream(super.eval(
-      expression,
-      context,
-      onValueAssigned: onValueAssigned,
-    ));
+    return _asStream(
+      super.eval(expression, context, onValueAssigned: onValueAssigned),
+    );
   }
 
   @override
@@ -60,43 +58,60 @@ class AsyncExpressionEvaluator extends ExpressionEvaluator {
 
   @override
   Stream evalUnaryExpression(
-      UnaryExpression expression, Map<String, dynamic> context) {
+    UnaryExpression expression,
+    Map<String, dynamic> context,
+  ) {
     final argument = eval(expression.argument, context);
 
     return argument.map((v) {
       return baseEvaluator.evalUnaryExpression(
-          UnaryExpression(expression.operator, _asLiteral(v),
-              prefix: expression.prefix),
-          context);
+        UnaryExpression(
+          expression.operator,
+          _asLiteral(v),
+          prefix: expression.prefix,
+        ),
+        context,
+      );
     });
   }
 
   @override
   dynamic evalCallExpression(
-      CallExpression expression, Map<String, dynamic> context) {
+    CallExpression expression,
+    Map<String, dynamic> context,
+  ) {
     final callee = eval(expression.callee, context);
-    final arguments =
-        expression.arguments.map((e) => eval(e, context)).toList();
+    final arguments = expression.arguments
+        .map((e) => eval(e, context))
+        .toList();
     return CombineLatestStream([callee, ...arguments], (l) {
       return baseEvaluator.evalCallExpression(
-          CallExpression(
-              _asLiteral(l.first), [for (var v in l.skip(1)) _asLiteral(v)]),
-          context);
+        CallExpression(_asLiteral(l.first), [
+          for (var v in l.skip(1)) _asLiteral(v),
+        ]),
+        context,
+      );
     }).switchMap((v) => _asStream(v));
   }
 
   @override
   Stream evalConditionalExpression(
-      ConditionalExpression expression, Map<String, dynamic> context) {
+    ConditionalExpression expression,
+    Map<String, dynamic> context,
+  ) {
     final test = eval(expression.test, context);
     final cons = eval(expression.consequent, context);
     final alt = eval(expression.alternate, context);
 
     return CombineLatestStream.combine3(test, cons, alt, (test, cons, alt) {
       return baseEvaluator.evalConditionalExpression(
-          ConditionalExpression(
-              _asLiteral(test), _asLiteral(cons), _asLiteral(alt)),
-          context);
+        ConditionalExpression(
+          _asLiteral(test),
+          _asLiteral(cons),
+          _asLiteral(alt),
+        ),
+        context,
+      );
     });
   }
 
@@ -110,7 +125,9 @@ class AsyncExpressionEvaluator extends ExpressionEvaluator {
     final index = eval(expression.index, context);
     return CombineLatestStream.combine2(obj, index, (obj, index) {
       return baseEvaluator.evalIndexExpression(
-          IndexExpression(_asLiteral(obj), _asLiteral(index)), context);
+        IndexExpression(_asLiteral(obj), _asLiteral(index)),
+        context,
+      );
     });
   }
 

@@ -1,12 +1,8 @@
-import 'package:template_expressions/template_expressions.dart';
+import 'package:template_expressions_4/template_expressions.dart';
 import 'package:test/test.dart';
 
 void main() {
-  final context = {
-    'a': 'a',
-    'b': 'B',
-    'c': 'c',
-  };
+  final context = {'a': 'a', 'b': 'B', 'c': 'c'};
 
   test('hash syntax', () {
     const syntax = HashExpressionSyntax();
@@ -17,16 +13,10 @@ void main() {
 
     expect(template.process(context: context), 'Hello World!');
 
-    template = Template(
-      syntax: [syntax],
-      value: 'Hello ##a##!',
-    );
+    template = Template(syntax: [syntax], value: 'Hello ##a##!');
     expect(template.process(context: context), 'Hello a!');
 
-    template = Template(
-      syntax: [syntax],
-      value: 'Hello ##a + b##!',
-    );
+    template = Template(syntax: [syntax], value: 'Hello ##a + b##!');
     expect(template.process(context: context), 'Hello aB!');
 
     template = Template(
@@ -47,10 +37,7 @@ void main() {
     );
     expect(template.process(context: context), 'A b');
 
-    template = Template(
-      syntax: [syntax],
-      value: '##a.toUpperCase()## \\##b##',
-    );
+    template = Template(syntax: [syntax], value: '##a.toUpperCase()## \\##b##');
     expect(template.process(context: context), 'A ##b##');
 
     template = Template(
@@ -59,10 +46,7 @@ void main() {
     );
     expect(template.process(context: context), 'A ##b##');
 
-    template = Template(
-      syntax: [syntax],
-      value: '##a + " " + "\\##b\\##"##',
-    );
+    template = Template(syntax: [syntax], value: '##a + " " + "\\##b\\##"##');
     expect(template.process(context: context), 'a ##b##');
   });
 
@@ -91,23 +75,14 @@ void main() {
 
   test('mustache syntax', () {
     const syntax = MustacheExpressionSyntax();
-    var template = Template(
-      syntax: [syntax],
-      value: 'Hello World!',
-    );
+    var template = Template(syntax: [syntax], value: 'Hello World!');
 
     expect(template.process(context: context), 'Hello World!');
 
-    template = Template(
-      syntax: [syntax],
-      value: 'Hello {{a}}!',
-    );
+    template = Template(syntax: [syntax], value: 'Hello {{a}}!');
     expect(template.process(context: context), 'Hello a!');
 
-    template = Template(
-      syntax: [syntax],
-      value: 'Hello {{a + b}}!',
-    );
+    template = Template(syntax: [syntax], value: 'Hello {{a + b}}!');
     expect(template.process(context: context), 'Hello aB!');
 
     template = Template(
@@ -128,16 +103,10 @@ void main() {
     );
     expect(template.process(context: context), 'A b');
 
-    template = Template(
-      syntax: [syntax],
-      value: '{{a.toUpperCase()}} \\{{b}}',
-    );
+    template = Template(syntax: [syntax], value: '{{a.toUpperCase()}} \\{{b}}');
     expect(template.process(context: context), 'A {{b}}');
 
-    template = Template(
-      syntax: [syntax],
-      value: '{{a + " " + "{{b\\}}"}}',
-    );
+    template = Template(syntax: [syntax], value: '{{a + " " + "{{b\\}}"}}');
     expect(template.process(context: context), 'a {{b}}');
   });
 
@@ -150,16 +119,10 @@ void main() {
 
     expect(template.process(context: context), 'Hello World!');
 
-    template = Template(
-      syntax: [syntax],
-      value: 'Hello |a|!',
-    );
+    template = Template(syntax: [syntax], value: 'Hello |a|!');
     expect(template.process(context: context), 'Hello a!');
 
-    template = Template(
-      syntax: [syntax],
-      value: 'Hello |a + b|!',
-    );
+    template = Template(syntax: [syntax], value: 'Hello |a + b|!');
     expect(template.process(context: context), 'Hello aB!');
 
     template = Template(
@@ -180,44 +143,26 @@ void main() {
     );
     expect(template.process(context: context), 'A b');
 
-    template = Template(
-      syntax: [syntax],
-      value: '|a.toUpperCase()| \\|b|',
-    );
+    template = Template(syntax: [syntax], value: '|a.toUpperCase()| \\|b|');
     expect(template.process(context: context), 'A |b|');
 
-    template = Template(
-      syntax: [syntax],
-      value: '|a.toUpperCase()| \\|b\\|',
-    );
+    template = Template(syntax: [syntax], value: '|a.toUpperCase()| \\|b\\|');
     expect(template.process(context: context), 'A |b|');
 
-    template = Template(
-      syntax: [syntax],
-      value: '|a + " " + "\\|b\\|"|',
-    );
+    template = Template(syntax: [syntax], value: '|a + " " + "\\|b\\|"|');
     expect(template.process(context: context), 'a |b|');
   });
 
   test('standard syntax', () {
     const syntax = StandardExpressionSyntax();
-    var template = Template(
-      syntax: [syntax],
-      value: 'Hello World!',
-    );
+    var template = Template(syntax: [syntax], value: 'Hello World!');
 
     expect(template.process(context: context), 'Hello World!');
 
-    template = Template(
-      syntax: [syntax],
-      value: r'Hello ${a}!',
-    );
+    template = Template(syntax: [syntax], value: r'Hello ${a}!');
     expect(template.process(context: context), 'Hello a!');
 
-    template = Template(
-      syntax: [syntax],
-      value: r'Hello ${a + b}!',
-    );
+    template = Template(syntax: [syntax], value: r'Hello ${a + b}!');
     expect(template.process(context: context), 'Hello aB!');
 
     template = Template(
@@ -238,23 +183,15 @@ void main() {
     );
     expect(template.process(context: context), 'A b');
 
-    template = Template(
-      syntax: [syntax],
-      value: r'${a.toUpperCase()} \${b}',
-    );
+    template = Template(syntax: [syntax], value: r'${a.toUpperCase()} \${b}');
     expect(template.process(context: context), r'A ${b}');
 
-    template = Template(
-      syntax: [syntax],
-      value: r'${a + " " + "${b\}"}',
-    );
+    template = Template(syntax: [syntax], value: r'${a + " " + "${b\}"}');
     expect(template.process(context: context), r'a ${b}');
   });
 
   test('map and array', () {
-    var template = Template(
-      value: r"${concat(['Hello ', name, '!'])}",
-    );
+    var template = Template(value: r"${concat(['Hello ', name, '!'])}");
     expect(
       template.process(
         context: {
@@ -279,9 +216,7 @@ void main() {
       'Hello Steve!',
     );
 
-    template = Template(
-      value: r"${concat(['Hello ', '!'], {'name': name\})}",
-    );
+    template = Template(value: r"${concat(['Hello ', '!'], {'name': name\})}");
     expect(
       template.process(
         context: {
@@ -293,9 +228,7 @@ void main() {
       'Hello Steve!',
     );
 
-    template = Template(
-      value: r'${addAll([add(a, b), x + y])}',
-    );
+    template = Template(value: r'${addAll([add(a, b), x + y])}');
     expect(
       template.process(
         context: {
@@ -310,9 +243,7 @@ void main() {
       (1 + 2 + 10 + 20).toString(),
     );
 
-    template = Template(
-      value: r'${addAll([addAll([a, b]), x + y])}',
-    );
+    template = Template(value: r'${addAll([addAll([a, b]), x + y])}');
     expect(
       template.process(
         context: {
@@ -326,9 +257,7 @@ void main() {
       (1 + 2 + 10 + 20).toString(),
     );
 
-    template = Template(
-      value: r"${addAll([add({'a': a, 'b': b\}), x + y])}",
-    );
+    template = Template(value: r"${addAll([add({'a': a, 'b': b\}), x + y])}");
     expect(
       template.process(
         context: {
@@ -354,10 +283,7 @@ void main() {
         syntax: [const MustacheExpressionSyntax()],
         value: '{{eval(["Hello ", {"name": "Mike"}, "!"])}}',
       );
-      expect(
-        template.process(context: context),
-        'Hello Mike!',
-      );
+      expect(template.process(context: context), 'Hello Mike!');
     });
 
     test('array in map', () {
@@ -369,10 +295,7 @@ void main() {
         syntax: [const MustacheExpressionSyntax()],
         value: '{{eval({"prefix": "Hello ", "name": ["Mike"], "suffix":"!"})}}',
       );
-      expect(
-        template.process(context: context),
-        'Hello Mike!',
-      );
+      expect(template.process(context: context), 'Hello Mike!');
     });
   });
 }

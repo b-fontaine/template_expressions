@@ -1,3 +1,10 @@
+## [4.0.0+1] - October 25, 2025
+
+* Fork from [template_expressions](https://github.com/peiffer-innovations/template_expressions)
+* Updated to Dart 3.9
+* Updated dependencies
+
+
 ## [3.3.1+2] - December 10, 2024
 
 * Automated dependency updates

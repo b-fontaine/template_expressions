@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:convert/convert.dart';
-import 'package:template_expressions/src/types/codex.dart';
+import 'package:template_expressions_4/src/types/codex.dart';
 
 /// Functions related to JsonPath processing.
 class CodexFunctions {
@@ -16,8 +16,9 @@ class CodexFunctions {
       encoder: (value) => const Base64Codec.urlSafe().encode(value),
     ),
     'json': Codex(
-        decoder: (value) => json.decode(value),
-        encoder: (value) => json.encode(value)),
+      decoder: (value) => json.decode(value),
+      encoder: (value) => json.encode(value),
+    ),
     'hex': Codex(
       decoder: (value) => hex.decode(value),
       encoder: (value) => hex.encode(value),

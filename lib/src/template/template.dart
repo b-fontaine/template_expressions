@@ -1,14 +1,12 @@
 import 'package:logging/logging.dart';
-import 'package:template_expressions/template_expressions.dart';
+import 'package:template_expressions_4/template_expressions.dart';
 
 class Template {
-  Template({
-    required String value,
-    List<ExpressionSyntax>? syntax,
-  })  : _syntax = syntax?.isNotEmpty == true
-            ? syntax!
-            : const [StandardExpressionSyntax()],
-        _value = value;
+  Template({required String value, List<ExpressionSyntax>? syntax})
+    : _syntax = syntax?.isNotEmpty == true
+          ? syntax!
+          : const [StandardExpressionSyntax()],
+      _value = value;
 
   static final Logger _logger = Logger('Template');
 
@@ -37,9 +35,7 @@ class Template {
           'The [evaluate] function only supports a single template expression but [${prepared.entries.length}] were found.',
         );
       } else {
-        final evaluator = ExpressionEvaluator(
-          memberAccessors: memberAccessors,
-        );
+        final evaluator = ExpressionEvaluator(memberAccessors: memberAccessors);
 
         result = evaluator.eval(
           Expression.parse(prepared.entries.first.content),
@@ -79,10 +75,7 @@ class Template {
         );
 
         result = await evaluator
-            .eval(
-              Expression.parse(prepared.entries.first.content),
-              ctx,
-            )
+            .eval(Expression.parse(prepared.entries.first.content), ctx)
             .first;
       }
     }
@@ -106,9 +99,7 @@ class Template {
     final prepared = _prepare();
     var data = prepared.data;
 
-    final evaluator = ExpressionEvaluator(
-      memberAccessors: memberAccessors,
-    );
+    final evaluator = ExpressionEvaluator(memberAccessors: memberAccessors);
     for (var entry in prepared.entries) {
       try {
         final evaled = evaluator.eval(Expression.parse(entry.content), ctx);
@@ -148,10 +139,7 @@ class Template {
     for (var entry in prepared.entries) {
       try {
         final evaled = await evaluator
-            .eval(
-              Expression.parse(entry.content),
-              ctx,
-            )
+            .eval(Expression.parse(entry.content), ctx)
             .first;
         data = entry.replace(
           data,
@@ -240,18 +228,12 @@ class Template {
 
     entries.sort();
 
-    return _ExpressionResult(
-      data: buffer.toString(),
-      entries: entries,
-    );
+    return _ExpressionResult(data: buffer.toString(), entries: entries);
   }
 }
 
 class _ExpressionResult {
-  _ExpressionResult({
-    required this.data,
-    required this.entries,
-  });
+  _ExpressionResult({required this.data, required this.entries});
 
   final String data;
   final List<ExpressionEntry> entries;

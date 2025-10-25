@@ -1,13 +1,10 @@
-import 'package:template_expressions/template_expressions.dart';
+import 'package:template_expressions_4/template_expressions.dart';
 
 /// Represents an entry in a template that may be an expression
 class ExpressionEntry implements Comparable<ExpressionEntry> {
   /// Creates the entry with the associated syntax and the start position within
   /// the template for where this entry was created.
-  ExpressionEntry({
-    required this.syntax,
-    required this.startPosition,
-  });
+  ExpressionEntry({required this.syntax, required this.startPosition});
 
   /// The start position in the template for this entry.
   final int startPosition;
@@ -20,9 +17,9 @@ class ExpressionEntry implements Comparable<ExpressionEntry> {
   /// Returns the content of the entry.  The content will exclude the syntax
   /// tokens.
   String get content => _value.toString().substring(
-        syntax.startToken.length,
-        _value.length - syntax.endToken.length,
-      );
+    syntax.startToken.length,
+    _value.length - syntax.endToken.length,
+  );
 
   /// Returns the full value of the entry, including any syntax tokens.
   String get value => _value.toString();

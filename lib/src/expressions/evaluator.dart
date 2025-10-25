@@ -3,7 +3,7 @@ library;
 import 'package:json_class/json_class.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
-import 'package:template_expressions/expressions.dart';
+import 'package:template_expressions_4/expressions.dart';
 
 import 'async_evaluator.dart';
 // import 'expressions.dart';
@@ -66,8 +66,9 @@ export 'functions/random_functions.dart';
 class ExpressionEvaluator {
   const ExpressionEvaluator({this.memberAccessors = const []});
 
-  const factory ExpressionEvaluator.async(
-      {List<MemberAccessor> memberAccessors}) = AsyncExpressionEvaluator;
+  const factory ExpressionEvaluator.async({
+    List<MemberAccessor> memberAccessors,
+  }) = AsyncExpressionEvaluator;
 
   static final Map<String, Object> _delegate = {
     ...CodexFunctions.members,
@@ -126,7 +127,8 @@ class ExpressionEvaluator {
       result = evalConditionalExpression(expression, ctx);
     } else {
       throw ArgumentError(
-          "Unknown expression type '${expression.runtimeType}'");
+        "Unknown expression type '${expression.runtimeType}'",
+      );
     }
 
     _logger.finest(
@@ -136,10 +138,7 @@ class ExpressionEvaluator {
   }
 
   @protected
-  dynamic evalLiteral(
-    Literal literal,
-    Map<String, dynamic> context,
-  ) {
+  dynamic evalLiteral(Literal literal, Map<String, dynamic> context) {
     final value = literal.value;
     dynamic result = value;
 
@@ -147,24 +146,19 @@ class ExpressionEvaluator {
       result = value.map((e) => eval(e, context)).toList();
     } else if (value is Map) {
       result = value.map(
-          (key, value) => MapEntry(eval(key, context), eval(value, context)));
+        (key, value) => MapEntry(eval(key, context), eval(value, context)),
+      );
     }
     return result;
   }
 
   @protected
-  dynamic evalVariable(
-    Variable variable,
-    Map<String, dynamic> context,
-  ) {
+  dynamic evalVariable(Variable variable, Map<String, dynamic> context) {
     return context[variable.identifier.name];
   }
 
   @protected
-  dynamic evalThis(
-    ThisExpression expression,
-    Map<String, dynamic> context,
-  ) {
+  dynamic evalThis(ThisExpression expression, Map<String, dynamic> context) {
     return context['this'];
   }
 
@@ -199,8 +193,9 @@ class ExpressionEvaluator {
     Map<String, dynamic> context,
   ) {
     final callee = eval(expression.callee, context);
-    final arguments =
-        expression.arguments.map((e) => eval(e, context)).toList();
+    final arguments = expression.arguments
+        .map((e) => eval(e, context))
+        .toList();
 
     _logger.finest('[evalCallExpression]: [${expression.callee}]');
 
@@ -406,9 +401,11 @@ class ExpressionEvaluatorException implements Exception {
   ExpressionEvaluatorException(this.message);
 
   ExpressionEvaluatorException.memberAccessNotSupported(
-      Type type, String member)
-      : this(
-            'Access of member `$member` not supported for objects of type `$type`: have you defined a member accessor in the ExpressionEvaluator?');
+    Type type,
+    String member,
+  ) : this(
+        'Access of member `$member` not supported for objects of type `$type`: have you defined a member accessor in the ExpressionEvaluator?',
+      );
 
   final String message;
 
@@ -423,10 +420,7 @@ class CustomizableMemberAccessor<T> extends _MemberAccessor<T>
     implements MemberAccessor<T> {
   CustomizableMemberAccessor(super.accessors);
 
-  void addAccessor(
-    String name,
-    SingleMemberAccessor<T> accessor,
-  ) =>
+  void addAccessor(String name, SingleMemberAccessor<T> accessor) =>
       accessors[name] = accessor;
 
   void addAccessors(Map<String, SingleMemberAccessor<T>> accessors) =>

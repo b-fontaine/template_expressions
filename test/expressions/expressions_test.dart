@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:petitparser/petitparser.dart';
-import 'package:template_expressions/expressions.dart';
-import 'package:template_expressions/src/expressions/parser.dart';
+import 'package:template_expressions_4/expressions.dart';
+import 'package:template_expressions_4/src/expressions/parser.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -27,11 +27,7 @@ void main() {
         expect(w.value.raw, v);
       }
 
-      for (var v in [
-        '-134',
-        '.5.4',
-        '1e5E3',
-      ]) {
+      for (var v in ['-134', '.5.4', '1e5E3']) {
         expect(parser.numericLiteral.end().parse(v) is Success, isFalse);
       }
     });
@@ -52,10 +48,7 @@ void main() {
         expect(w.value.raw, v);
       }
 
-      for (var v in [
-        "sd'<sdf'",
-        "'df'sdf'",
-      ]) {
+      for (var v in ["sd'<sdf'", "'df'sdf'"]) {
         expect(parser.stringLiteral.end().parse(v) is Success, isFalse);
       }
     });
@@ -99,7 +92,7 @@ void main() {
           Literal('hello'): Literal(1),
           Literal('world'): Literal(2),
         },
-        '{}': {}
+        '{}': {},
       }.entries) {
         final v = e.key;
         final w = parser.mapLiteral.end().parse(v);
@@ -112,7 +105,7 @@ void main() {
     test('array literal', () {
       for (var e in {
         '[1, 2, 3]': [Literal(1), Literal(2), Literal(3)],
-        '[]': []
+        '[]': [],
       }.entries) {
         final v = e.key;
         final w = parser.arrayLiteral.end().parse(v);
@@ -138,7 +131,7 @@ void main() {
         'foo.bar(baz)',
         '1',
         '"abc"',
-        '(a%2)'
+        '(a%2)',
       ]) {
         final w = parser.token.end().parse(v);
         expect(w is Success, isTrue, reason: 'Failed parsing `$v`');
@@ -152,7 +145,7 @@ void main() {
         '1+2',
         'a+b*2-Math.sqrt(2)',
         '-1+2',
-        '1+4-5%2*5<4==(2+1)*1<=2&&2||2'
+        '1+4-5%2*5<4==(2+1)*1<=2&&2||2',
       ]) {
         final w = parser.binaryExpression.end().parse(v);
         expect(w is Success, isTrue, reason: 'Failed parsing `$v`');
@@ -200,12 +193,7 @@ void main() {
         'add(add(0, 1), add(2, add(3, add(4, 5))))',
       );
 
-      expect(
-        evaluator.eval(parsed, {
-          'add': (a, b) => a + b,
-        }),
-        15,
-      );
+      expect(evaluator.eval(parsed, {'add': (a, b) => a + b}), 15);
     });
 
     test('dynamic args', () {
@@ -230,7 +218,7 @@ void main() {
         '1+2': 3,
         '-1+2': 1,
         '1+4-5%2*3': 2,
-        'x*x+y*y==z*z': true
+        'x*x+y*y==z*z': true,
       };
 
       expressions.forEach((e, r) {
@@ -245,8 +233,8 @@ void main() {
           'x': 3,
           'y': 4,
           'z': 5,
-          's': [null]
-        }
+          's': [null],
+        },
       };
       final expressions = {'l[1]': 2, "m['z']": 5, 'm["s"][0]': null};
 
@@ -282,7 +270,7 @@ void main() {
     test('array expression', () {
       final context = <String, dynamic>{};
       final expressions = {
-        '[1,2,3]': [1, 2, 3]
+        '[1,2,3]': [1, 2, 3],
       };
 
       expressions.forEach((e, r) {
@@ -293,7 +281,7 @@ void main() {
     test('map expression', () {
       final context = <String, dynamic>{};
       final expressions = {
-        '{"hello": "world"}': {'hello': 'world'}
+        '{"hello": "world"}': {'hello': 'world'},
       };
 
       expressions.forEach((e, r) {
@@ -302,11 +290,7 @@ void main() {
     });
 
     test('string concat', () {
-      final context = {
-        'a': 'alice',
-        'b': 'bob',
-        'first_name': 'John',
-      };
+      final context = {'a': 'alice', 'b': 'bob', 'first_name': 'John'};
       final expressions = {
         'a + b': 'alicebob',
         'a + " " + b': 'alice bob',
@@ -319,10 +303,7 @@ void main() {
     });
 
     test('bool members', () {
-      final context = {
-        't': true,
-        'f': false,
-      };
+      final context = {'t': true, 'f': false};
       final expressions = {
         't.toString()': 'true',
         'f.toString()': 'false',
@@ -355,11 +336,7 @@ void main() {
 
     test('map members', () {
       final context = {
-        'map': {
-          'a': 'one',
-          'b': 'two',
-          'c': 'three',
-        },
+        'map': {'a': 'one', 'b': 'two', 'c': 'three'},
         'empty': <String, String>{},
       };
       final expressions = {
@@ -444,10 +421,7 @@ void main() {
     });
 
     test('truncating division', () {
-      final expressions = {
-        '7 ~/ 3': 2,
-        '7.5 ~/ 3.1': 2,
-      };
+      final expressions = {'7 ~/ 3': 2, '7.5 ~/ 3.1': 2};
 
       expressions.forEach((e, r) {
         expect(evaluator.eval(Expression.parse(e), const {}), r);
@@ -456,67 +430,80 @@ void main() {
 
     group('member expressions', () {
       test('toString member', () {
-        final evaluator = ExpressionEvaluator(memberAccessors: [
-          MemberAccessor<Object?>({'toString': (v) => v.toString})
-        ]);
+        final evaluator = ExpressionEvaluator(
+          memberAccessors: [
+            MemberAccessor<Object?>({'toString': (v) => v.toString}),
+          ],
+        );
 
         final expression = Expression.parse('x.toString()');
 
         expect(evaluator.eval(expression, {'x': null}), 'null');
         expect(evaluator.eval(expression, {'x': 1}), '1');
         expect(evaluator.eval(expression, {'x': true}), 'true');
-        expect(evaluator.eval(expression, {'x': DateTime(2020, 1, 1)}),
-            '2020-01-01 00:00:00.000');
+        expect(
+          evaluator.eval(expression, {'x': DateTime(2020, 1, 1)}),
+          '2020-01-01 00:00:00.000',
+        );
       });
 
       test('Uri members', () {
-        final evaluator = ExpressionEvaluator(memberAccessors: [
-          MemberAccessor<Uri>({
-            'host': (v) => v.host,
-            'isScheme': (v) => v.isScheme,
-            'path': (v) => v.path,
-            'replace': (v) => (map) => v.replace(
-                  fragment: map['fragment'],
-                  host: map['host'],
-                  path: map['path'],
-                  pathSegments: map['pathSegments'],
-                  port: map['port'],
-                  query: map['query'],
-                  queryParameters: map['queryParameters'],
-                  scheme: map['scheme'],
-                  userInfo: map['userInfo'],
-                ),
-            'scheme': (v) => v.scheme,
-            'queryParameters': (v) => v.queryParameters,
-          })
-        ]);
+        final evaluator = ExpressionEvaluator(
+          memberAccessors: [
+            MemberAccessor<Uri>({
+              'host': (v) => v.host,
+              'isScheme': (v) => v.isScheme,
+              'path': (v) => v.path,
+              'replace': (v) =>
+                  (map) => v.replace(
+                    fragment: map['fragment'],
+                    host: map['host'],
+                    path: map['path'],
+                    pathSegments: map['pathSegments'],
+                    port: map['port'],
+                    query: map['query'],
+                    queryParameters: map['queryParameters'],
+                    scheme: map['scheme'],
+                    userInfo: map['userInfo'],
+                  ),
+              'scheme': (v) => v.scheme,
+              'queryParameters': (v) => v.queryParameters,
+            }),
+          ],
+        );
 
         final context = {'x': Uri.parse('http://localhost/index.html?lang=nl')};
 
         expect(
-            evaluator.eval(Expression.parse('x.host'), context), 'localhost');
+          evaluator.eval(Expression.parse('x.host'), context),
+          'localhost',
+        );
         expect(
           evaluator.eval(Expression.parse('x.isScheme("HTTP")'), context),
           true,
         );
         expect(
           evaluator.eval(
-              Expression.parse('x.replace({"scheme": "https"}).scheme'),
-              context),
+            Expression.parse('x.replace({"scheme": "https"}).scheme'),
+            context,
+          ),
           'https',
         );
         expect(
-            evaluator.eval(Expression.parse('x.path'), context), '/index.html');
+          evaluator.eval(Expression.parse('x.path'), context),
+          '/index.html',
+        );
         expect(evaluator.eval(Expression.parse('x.scheme'), context), 'http');
-        expect(evaluator.eval(Expression.parse('x.queryParameters'), context),
-            {'lang': 'nl'});
+        expect(evaluator.eval(Expression.parse('x.queryParameters'), context), {
+          'lang': 'nl',
+        });
       });
 
       test('Map members', () {
         const evaluator = ExpressionEvaluator();
 
         final context = {
-          'x': {'y': 1, 'z': 2}
+          'x': {'y': 1, 'z': 2},
         };
 
         expect(evaluator.eval(Expression.parse('x.y'), context), 1);

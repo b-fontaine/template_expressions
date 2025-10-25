@@ -3,7 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:template_expressions/src/template/template.dart';
+import 'package:template_expressions_4/src/template/template.dart';
 
 Future<void> main(List<String> args) async {
   if (args.isEmpty) {

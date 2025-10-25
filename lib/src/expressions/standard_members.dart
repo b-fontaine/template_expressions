@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:json_class/json_class.dart';
 import 'package:json_path/json_path.dart';
 import 'package:logging/logging.dart';
-import 'package:template_expressions/template_expressions.dart';
+import 'package:template_expressions_4/template_expressions.dart';
 import 'package:yaon/yaon.dart';
 
 /// Associates member functions from common objects for use by the expression
@@ -140,12 +140,12 @@ dynamic _processDateTime(DateTime target, String name) {
   switch (name) {
     case 'add':
       result = (duration) => DateTime.fromMillisecondsSinceEpoch(
-            target.millisecondsSinceEpoch +
-                ((duration is Duration)
-                    ? duration.inMilliseconds
-                    : JsonClass.maybeParseInt(duration)!),
-            isUtc: target.isUtc,
-          );
+        target.millisecondsSinceEpoch +
+            ((duration is Duration)
+                ? duration.inMilliseconds
+                : JsonClass.maybeParseInt(duration)!),
+        isUtc: target.isUtc,
+      );
       break;
 
     case 'compareTo':
@@ -174,10 +174,10 @@ dynamic _processDateTime(DateTime target, String name) {
 
     case 'subtract':
       result = (duration) => target.subtract(
-            duration is Duration
-                ? duration
-                : Duration(milliseconds: JsonClass.maybeParseInt(duration)!),
-          );
+        duration is Duration
+            ? duration
+            : Duration(milliseconds: JsonClass.maybeParseInt(duration)!),
+      );
       break;
 
     case 'toIso8601String':
@@ -233,11 +233,12 @@ dynamic _processDuration(Duration target, String name) {
 
     case 'subtract':
       result = (duration) => Duration(
-            milliseconds: target.inMilliseconds -
-                (duration is Duration
-                    ? duration.inMilliseconds
-                    : JsonClass.maybeParseInt(duration)!),
-          );
+        milliseconds:
+            target.inMilliseconds -
+            (duration is Duration
+                ? duration.inMilliseconds
+                : JsonClass.maybeParseInt(duration)!),
+      );
       break;
   }
 
@@ -705,10 +706,7 @@ dynamic _processString(String target, String name) {
       break;
 
     case 'decode':
-      result = () => yaon.parse(
-            target,
-            normalize: true,
-          );
+      result = () => yaon.parse(target, normalize: true);
       break;
 
     case 'endsWith':
@@ -744,12 +742,8 @@ dynamic _processString(String target, String name) {
       break;
 
     case 'path':
-      result = (path) => JsonPath(path)
-          .readValues(yaon.parse(
-            target,
-            normalize: true,
-          ))
-          .first;
+      result = (path) =>
+          JsonPath(path).readValues(yaon.parse(target, normalize: true)).first;
       break;
 
     case 'replaceAll':

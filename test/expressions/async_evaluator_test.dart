@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:fake_async/fake_async.dart' as fake_async;
-import 'package:template_expressions/expressions.dart';
-import 'package:template_expressions/src/expressions/async_evaluator.dart';
+import 'package:template_expressions_4/expressions.dart';
+import 'package:template_expressions_4/src/expressions/async_evaluator.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -27,7 +27,7 @@ void main() {
           await Future.delayed(const Duration(milliseconds: 100));
 
           return a + b;
-        }
+        },
       };
       final startTime = DateTime.now().millisecondsSinceEpoch;
       final expression = Expression.parse('x = add(add(1, 2), add(2, 3))');
@@ -53,20 +53,16 @@ void main() {
 
     test('Delayed Future', () async {
       final startTime = DateTime.now().millisecondsSinceEpoch;
-      final expression = Expression.parse(
-        'x.addDelayed(seconds(1), 2)',
-      );
+      final expression = Expression.parse('x.addDelayed(seconds(1), 2)');
 
       final evaluator = ExpressionEvaluator.async(
         memberAccessors: [
-          MemberAccessor<int>(
-            {
-              'addDelayed': (i) => (delay, value) async {
-                    await Future.delayed(delay);
-                    return i + value;
-                  },
+          MemberAccessor<int>({
+            'addDelayed': (i) => (delay, value) async {
+              await Future.delayed(delay);
+              return i + value;
             },
-          ),
+          }),
         ],
       );
 
@@ -86,7 +82,7 @@ void main() {
       const evaluator = AsyncExpressionEvaluator();
 
       final f = evaluator.eval(expression, {
-        'x': Stream.fromIterable([50, 80])
+        'x': Stream.fromIterable([50, 80]),
       });
 
       expect(await f.toList(), [false, true]);
@@ -150,10 +146,7 @@ void main() {
 
         const evaluator = AsyncExpressionEvaluator();
 
-        final stream = evaluator.eval(expression, {
-          'x': 10,
-          'y': 20,
-        });
+        final stream = evaluator.eval(expression, {'x': 10, 'y': 20});
 
         dynamic current;
         stream.listen((v) => current = v);
@@ -169,7 +162,7 @@ void main() {
       const evaluator = AsyncExpressionEvaluator();
 
       final f = evaluator.eval(expression, {
-        'x': Stream.fromIterable([50, 80])
+        'x': Stream.fromIterable([50, 80]),
       });
 
       expect(await f.toList(), [-50, -80]);
@@ -181,7 +174,7 @@ void main() {
       const evaluator = AsyncExpressionEvaluator();
 
       final f = evaluator.eval(expression, {
-        'f': () => Stream.fromIterable(['hello', 'world'])
+        'f': () => Stream.fromIterable(['hello', 'world']),
       });
 
       expect(await f.toList(), ['hello', 'world']);
@@ -192,8 +185,9 @@ void main() {
 
       const evaluator = AsyncExpressionEvaluator();
 
-      final f =
-          evaluator.eval(expression, {'f': () => Future.value('hello world')});
+      final f = evaluator.eval(expression, {
+        'f': () => Future.value('hello world'),
+      });
 
       expect(await f.toList(), ['hello world']);
     });
@@ -400,8 +394,9 @@ void main() {
 }
 
 FutureOr<T> fakeAsync<T>(
-    FutureOr<T> Function(fake_async.FakeAsync async) callback,
-    {DateTime? initialTime}) {
+  FutureOr<T> Function(fake_async.FakeAsync async) callback, {
+  DateTime? initialTime,
+}) {
   final async = fake_async.FakeAsync(initialTime: initialTime);
   final f = async.run(callback);
   if (f is Future<T>) {
@@ -414,7 +409,8 @@ extension FakeAsyncX on fake_async.FakeAsync {
   Future<T> flushMicrotasksUntil<T>(Future<T> f) async {
     var isDone = false;
     f = f.whenComplete(
-        () => isDone = true); // check if all work in body has been done
+      () => isDone = true,
+    ); // check if all work in body has been done
     while (!isDone) {
       // flush the microtasks in real async zone
       await unblock();
