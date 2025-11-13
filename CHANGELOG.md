@@ -1,3 +1,7 @@
+## [4.0.0+1] - November 13, 2025
+
+* Updated to Flutter 3.38
+
 ## [4.0.0+1] - October 25, 2025
 
 * Fork from [template_expressions](https://github.com/peiffer-innovations/template_expressions)
